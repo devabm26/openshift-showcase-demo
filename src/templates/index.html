@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Thoughts Dashboard{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+
+  <!-- ── Filters ─────────────────────────────────────────────────────────── -->
+  <div class="filters-bar">
+    <form method="GET" action="{{ url_for('main.index') }}" class="filters-form">
+      <!--
+        CSRF note: This is a GET form (read-only, no state change).
+        GET forms do not require CSRF tokens per web_security.spec REQ-9.
+      -->
+      <label for="status-select">Status:</label>
+      <select id="status-select" name="status">
+        <option value="ALL" {% if current_status == 'ALL' %}selected{% endif %}>All</option>
+        {% for s in allowed_statuses %}
+          {# auto-escaped by Jinja2 — XSS prevention REQ-3 #}
+          <option value="{{ s }}" {% if current_status == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="limit-input">Limit:</label>
+      <input
+        id="limit-input"
+        type="number"
+        name="limit"
+        min="1"
+        max="500"
+        value="{{ current_limit }}"
+        class="limit-input"
+      >
+
+      <button type="submit" class="btn btn-primary">Apply</button>
+    </form>
+
+    <div class="summary-badges">
+      <span class="badge">Total shown: {{ thoughts | length }}</span>
+    </div>
+  </div>
+
+  <!-- ── Error banner ────────────────────────────────────────────────────── -->
+  {% if error_message %}
+    <div class="alert alert-error" role="alert">
+      {# auto-escaped by Jinja2 #}
+      {{ error_message }}
+    </div>
+  {% endif %}
+
+  <!-- ── Thoughts table ─────────────────────────────────────────────────── -->
+  {% if thoughts %}
+    <div class="table-wrapper">
+      <table class="thoughts-table" aria-label="Thoughts">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Author</th>
+            <th scope="col">Status</th>
+            <th scope="col" class="col-content">Content</th>
+            <th scope="col" class="col-number">Thumbs Up</th>
+            <th scope="col" class="col-number">Thumbs Down</th>
+            <th scope="col" class="col-number">Net Rating</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {% for thought in thoughts %}
+          <tr class="row-status-{{ thought.status | lower | replace('_', '-') }}">
+            <td>{{ thought.id }}</td>
+            {# All values auto-escaped by Jinja2 — XSS prevention REQ-3/REQ-4 #}
+            <td>{{ thought.author }}</td>
+            <td>
+              <span class="status-badge status-{{ thought.status | lower | replace('_', '-') }}">
+                {{ thought.status }}
+              </span>
+            </td>
+            <td class="col-content">{{ thought.content }}</td>
+            <td class="col-number positive">{{ thought.thumbs_up }}</td>
+            <td class="col-number negative">{{ thought.thumbs_down }}</td>
+            <td class="col-number {% if thought.net_rating > 0 %}positive{% elif thought.net_rating < 0 %}negative{% else %}neutral{% endif %}">
+              {% if thought.net_rating > 0 %}+{% endif %}{{ thought.net_rating }}
+            </td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% elif not error_message %}
+    <p class="no-data">No thoughts found for the selected filter.</p>
+  {% endif %}
+
+</section>
+{% endblock %}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Thoughts Dashboard{% endblock %}</title>
+  <!--
+    All styles are served from 'self' (CSP compliance).
+    No inline <script> tags — external JS only (web_security.spec REQ-6).
+    Jinja2 auto-escaping is ON by default for .html templates (REQ-3).
+  -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <h1 class="site-title">Thoughts Database Dashboard</h1>
+    </div>
+  </header>
+
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>Thoughts Reporting Dashboard &mdash; Enterprise Compliant</p>
+  </footer>
+
+  <!--
+    External script only — no inline JS (CSP + web_security.spec REQ-6).
+    data-* attributes pass server values safely (auto-escaped by Jinja2).
+  -->
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+</body>
+</html>
