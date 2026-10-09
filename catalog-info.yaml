@@ -1,0 +1,44 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: openshift-showcase-demo
+  description: python app
+  tags:
+    - python
+    - flask
+    - postgresql
+    - secure-by-default
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: devabm26/openshift-showcase-demo
+    dev.redhat.com/devspaces-url: https://devspaces.apps.cluster-6pfqs.6pfqs.sandbox2325.opentlc.com/#https://github.com/devabm26/openshift-showcase-demo
+    backstage.io/kubernetes-id: openshift-showcase-demo
+    backstage.io/kubernetes-namespace: thoughts-app 
+    janus-idp.io/tekton: openshift-showcase-demo
+  links:
+    - url: https://github.com/devabm26/openshift-showcase-demo
+      title: View Source
+      icon: github
+    - url: https://devspaces.apps.cluster-pjx5k.dyn.redhatworkshops.io/#https://github.com/devabm26/openshift-showcase-demo
+      title: Open in DevSpaces
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: group:default/arunhari82
+  providesApis:
+    - openshift-showcase-demo-api
+
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: openshift-showcase-demo-api
+  description: REST API for openshift-showcase-demo
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:default/arunhari82
+  definition:
+    $text: ./openapi.yaml
