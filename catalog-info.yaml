@@ -19,7 +19,7 @@ metadata:
     - url: https://github.com/devabm26/openshift-showcase-demo
       title: View Source
       icon: github
-    - url: https://devspaces.apps.cluster-pjx5k.dyn.redhatworkshops.io/#https://github.com/devabm26/openshift-showcase-demo
+    - url: https://devspaces.apps.cluster-xlq9d.dyn.redhatworkshops.io/#https://github.com/devabm26/openshift-showcase-demo
       title: Open in DevSpaces
       icon: dashboard
 spec:
